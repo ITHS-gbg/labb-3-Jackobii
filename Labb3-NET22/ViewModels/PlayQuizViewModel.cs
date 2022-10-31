@@ -1,6 +1,14 @@
-﻿namespace Labb3_NET22.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Labb3_NET22.Managers;
 
-public class PlayQuizViewModel
+namespace Labb3_NET22.ViewModels;
+
+public class PlayQuizViewModel : ObservableObject
 {
-    
+    private NavigationManager _navigationManager;
+
+    public PlayQuizViewModel(NavigationManager navigationManager)
+    {
+        _navigationManager = navigationManager;
+    }
 }

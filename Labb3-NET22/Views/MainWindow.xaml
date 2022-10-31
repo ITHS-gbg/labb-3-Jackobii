@@ -7,24 +7,25 @@
         xmlns:viewmodels="clr-namespace:Labb3_NET22.ViewModels"
         xmlns:views="clr-namespace:Labb3_NET22.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Background="CornflowerBlue">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">
                 <views:MainMenuView />
             </DataTemplate>
-            <!--<DataTemplate DataType="{x:Type viewmodels:ChooseQuizViewModel}">
-                <views:MainMenuView />
+            <DataTemplate DataType="{x:Type viewmodels:ChooseQuizViewModel}">
+                <views:ChooseQuizView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:PlayQuizViewModel}">
-                <views:MainMenuView />
+                <views:PlayQuizView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:CreateEditQuizViewModel}">
-                <views:MainMenuView />
+                <views:CreateEditQuizView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:ScoreboardViewModel}">
-                <views:MainMenuView />
-            </DataTemplate>-->
+                <views:ScoreboardView />
+            </DataTemplate>
         </Grid.Resources>
         <ContentControl Grid.Row="0" Content="{Binding CurrentViewModel}" />
     </Grid>

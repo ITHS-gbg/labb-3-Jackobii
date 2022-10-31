@@ -3,18 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Labb3_NET22.Views"
+             xmlns:local="clr-namespace:Labb3_NET22.Views" 
+             xmlns:viewmodels="clr-namespace:Labb3_NET22.ViewModels" 
+             d:DataContext="{d:DesignInstance viewmodels:MainMenuViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
-            
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-            <!--<RowDefinition></RowDefinition>
-               <RowDefinition></RowDefinition>-->
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -27,16 +29,15 @@
         </Grid.ColumnDefinitions>
         <TextBlock
             Style="{DynamicResource TitleText}"
-            Grid.Row="0" 
+            Grid.Row="1" 
             Grid.Column="2" 
             Grid.ColumnSpan="3" 
-            Text="Titel"
+            Text="Quiz"
         />
-        <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3" >
-            <Button Content="Spela Quiz"/>
-            <Button Content="Redigera Quiz"/>
-            <Button Content="Skapa Quiz"/>
-            <Button Content="Avsluta"/>
+        <StackPanel Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="5" >
+            <Button Style="{DynamicResource MainMenuButton}" Content="Välj Quiz" Command="{Binding NavigateChooseQuizCommand}"/>
+            <Button Style="{DynamicResource MainMenuButton}" Content="Skapa Quiz" Command="{Binding NavigateCreateEditQuizCommand}"/>
+            <Button Style="{DynamicResource MainMenuButton}" Content="Avsluta" Command="{Binding NavigateEndProgramCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

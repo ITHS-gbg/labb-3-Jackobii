@@ -10,7 +10,7 @@ public class MainMenuViewModel : ObservableObject
     private NavigationManager _navigationManager;
 
     public IRelayCommand NavigateChooseQuizCommand { get; }
-    public IRelayCommand NavigateCreateEditQuizCommand { get; }
+    public IRelayCommand NavigateCreateQuizCommand { get; }
     public IRelayCommand NavigateEndProgramCommand { get; }
 
     public MainMenuViewModel(NavigationManager navigationManager)
@@ -19,8 +19,8 @@ public class MainMenuViewModel : ObservableObject
 
         NavigateChooseQuizCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new ChooseQuizViewModel(_navigationManager));
-        NavigateCreateEditQuizCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new CreateEditQuizViewModel(_navigationManager));
+        NavigateCreateQuizCommand = new RelayCommand(() =>
+            _navigationManager.CurrentViewModel = new CreateQuizViewModel(_navigationManager));
         NavigateEndProgramCommand = new RelayCommand(() => System.Environment.Exit(0));
     }
 }

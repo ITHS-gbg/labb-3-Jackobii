@@ -4,12 +4,12 @@ using Labb3_NET22.Managers;
 
 namespace Labb3_NET22.ViewModels;
 
-public class CreateEditQuizViewModel : ObservableObject
+public class EditQuizViewModel : ObservableObject
 {
     private NavigationManager _navigationManager;
     public IRelayCommand NavigateMainMenuCommand { get; }
 
-    public CreateEditQuizViewModel(NavigationManager navigationManager)
+    public EditQuizViewModel(NavigationManager navigationManager)
     {
         _navigationManager = navigationManager;
 

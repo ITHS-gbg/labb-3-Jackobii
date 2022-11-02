@@ -18,9 +18,9 @@ namespace Labb3_NET22.Views
     /// <summary>
     /// Interaction logic for CreateEditQuizView.xaml
     /// </summary>
-    public partial class CreateEditQuizView : UserControl
+    public partial class CreateQuizView : UserControl
     {
-        public CreateEditQuizView()
+        public CreateQuizView()
         {
             InitializeComponent();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Labb3_NET22.DataModels;   
 
@@ -13,6 +14,13 @@ public class Quiz
     public Quiz()
     {
         _questions = new List<Question>();
+    }
+    public Quiz(string title, IEnumerable<Question> questions)
+    {
+        _title = title;
+        _questions = new List<Question>();
+        _questions = questions.ToList();
+
     }
 
     public Question GetRandomQuestion()

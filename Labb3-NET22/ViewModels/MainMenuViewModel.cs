@@ -20,7 +20,7 @@ public class MainMenuViewModel : ObservableObject
         NavigateChooseQuizCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new ChooseQuizViewModel(_navigationManager));
         NavigateCreateQuizCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new CreateQuizViewModel(_navigationManager));
+            _navigationManager.CurrentViewModel = new CreateQuizViewModel(_navigationManager, new QuizManager()));
         NavigateEndProgramCommand = new RelayCommand(() => System.Environment.Exit(0));
     }
 }

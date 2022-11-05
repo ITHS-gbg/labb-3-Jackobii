@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Labb3_NET22.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Labb3_NET22.ViewModels"
+    d:DataContext="{d:DesignInstance viewModels:CreateQuizViewModel}"
     d:DesignHeight="500"
     d:DesignWidth="1000"
     mc:Ignorable="d">
@@ -31,6 +33,7 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <!--Quiztitel-->
         <Grid
             Grid.Row="0"
             Grid.Column="0"
@@ -46,40 +49,57 @@
 
             <Label
                 Grid.Row="0"
+                Grid.Column="0"
                 VerticalAlignment="Center"
                 Content="Ange Quiztitel:"
-                FontSize="12" />
+                FontSize="12"
+                />
             <TextBox
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="6,3"
-                Text="" />
+                Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
+        <!--List of Questions-->
         <ListView
             Grid.Row="1"
             Grid.RowSpan="6"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Margin="28,20" />
+            Margin="28,20" 
+            ItemsSource="{Binding Questions, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedQuestion}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Statement}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        <!--Statement-->
         <TextBox
             Grid.Row="1"
             Grid.RowSpan="3"
             Grid.Column="3"
             Grid.ColumnSpan="4"
-            Margin="5" />
+            Margin="5 20 5 0" 
+            Text="{Binding Statement, UpdateSourceTrigger=PropertyChanged}"
+            />
+        <!--Image-->
         <Image
             Grid.Row="1"
             Grid.RowSpan="3"
             Grid.Column="7"
             Grid.ColumnSpan="3"
-            Margin="5"
+            Margin="5 20 5 0"
             Source="../ExamplePics/SwagMoma.jpeg" />
+        <!--Answers-->
         <Grid
             Grid.Row="4"
             Grid.RowSpan="3"
             Grid.Column="3"
-            Grid.ColumnSpan="7">
+            Grid.ColumnSpan="7"
+            Margin ="0 16">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -96,43 +116,57 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
-                Margin="5" />
+                Margin="5" 
+                Text="{Binding Answers[0], UpdateSourceTrigger=PropertyChanged}"
+                />
             <CheckBox
                 Grid.Row="0"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center" 
+                IsChecked="{Binding Checkbox1, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
-                Margin="5" />
+                Margin="5" 
+                Text="{Binding Answers[1], UpdateSourceTrigger=PropertyChanged}"
+                />
             <CheckBox
                 Grid.Row="1"
                 Grid.Column="2"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center" 
+                x:Name="CheckBox1"
+                IsChecked="{Binding Checkbox2, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox
                 Grid.Row="0"
                 Grid.Column="3"
                 Grid.ColumnSpan="2"
-                Margin="5" />
+                Margin="5" 
+                Text="{Binding Answers[2], UpdateSourceTrigger=PropertyChanged}"
+                />
             <CheckBox
                 Grid.Row="0"
                 Grid.Column="5"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center" 
+                IsChecked="{Binding Checkbox3, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox
                 Grid.Row="1"
                 Grid.Column="3"
                 Grid.ColumnSpan="2"
-                Margin="5" />
+                Margin="5" 
+                Text="{Binding Answers[3], UpdateSourceTrigger=PropertyChanged}"
+                />
             <CheckBox
                 Grid.Row="1"
                 Grid.Column="5"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
+                VerticalAlignment="Center" 
+                IsChecked="{Binding Checkbox4, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
+        <!--Buttons-->
         <Grid
             Grid.Row="7"
             Grid.Column="0"
@@ -157,8 +191,16 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Ny fråga" />
-                <Button Grid.Column="1" Content="Ta bort" />
+                <Button
+                    Grid.Column="0"
+                    Content="Spara fråga"
+                    Command="{Binding CreateQuestionCommand}"
+                />
+                <Button 
+                    Grid.Column="1" 
+                    Content="Ta bort" 
+                    Command="{Binding DeleteQuestionCommand}"
+                    />
             </Grid>
             <Grid Grid.Column="7" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
@@ -169,7 +211,11 @@
                     Grid.Column="0"
                     Command="{Binding NavigateMainMenuCommand}"
                     Content="Avbryt" />
-                <Button Grid.Column="1" Content="Spara Quiz" />
+                <Button 
+                    Grid.Column="1" 
+                    Command="{Binding SaveQuizCommand}"
+                    Content="Spara Quiz" 
+                />
             </Grid>
         </Grid>
     </Grid>

@@ -16,15 +16,17 @@ namespace Labb3_NET22
     public partial class App : Application
     {
         private readonly NavigationManager _navigationManager;
+        private readonly QuizManager _quizManager;
 
         public App()
         {
             _navigationManager = new NavigationManager();
+            _quizManager = new QuizManager();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _navigationManager.CurrentViewModel = new MainMenuViewModel(_navigationManager);
+            _navigationManager.CurrentViewModel = new MainMenuViewModel(_navigationManager, _quizManager);
             var mainWindow = new MainWindow { DataContext = new MainWindowViewModel(_navigationManager) };
             mainWindow.Show();
             base.OnStartup(e);

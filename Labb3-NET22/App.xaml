@@ -16,6 +16,11 @@
             <Setter Property="Background" Value="DarkSlateBlue" />
             <Setter Property="Foreground" Value="AliceBlue" />
             <Setter Property="FontSize" Value="20" />
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
         </Style>
         <Style x:Key="MainMenuButton" TargetType="Button">
             <Setter Property="Margin" Value="12" />
@@ -23,7 +28,11 @@
             <Setter Property="Foreground" Value="AliceBlue" />
             <Setter Property="FontSize" Value="28" />
             <Setter Property="Height" Value="58" />
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5" />
+                </Style>
+            </Style.Resources>
         </Style>
-
     </Application.Resources>
 </Application>

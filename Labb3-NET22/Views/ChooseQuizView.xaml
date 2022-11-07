@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Labb3_NET22.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Labb3_NET22.ViewModels"
+    d:DataContext="{d:DesignInstance viewModels:ChooseQuizViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -36,12 +38,25 @@
             Grid.Row="1"
             Grid.RowSpan="4"
             Grid.Column="1"
-            Grid.ColumnSpan="5" />
+            Grid.ColumnSpan="5"
+            ItemsSource="{Binding AllQuizzes}"
+            SelectedItem="{Binding SelectedQuiz}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Title}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <Button
             Grid.Row="5"
             Grid.Column="1"
             Command="{Binding NavigateMainMenuCommand}"
             Content="Avbryt" />
+        <Button
+            Grid.Row="5"
+            Grid.Column="2"
+            Command="{Binding DeleteQuizCommand}"
+            Content="Delete" />
         <Grid
             Grid.Row="5"
             Grid.Column="4"

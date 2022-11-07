@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Labb3_NET22.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Labb3_NET22.ViewModels"
+    d:DataContext="{d:DesignInstance viewModels:ScoreboardViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -32,6 +34,13 @@
             Grid.ColumnSpan="70"
             Style="{DynamicResource TitleText}"
             Text="Det där gick väl bra!" />
+        <TextBlock 
+            Grid.Row="2" 
+            Grid.Column="2" 
+            Grid.ColumnSpan="3"
+            Text="{Binding Score, UpdateSourceTrigger=PropertyChanged, 
+            StringFormat='Du svarade rätt på {0}'}"
+            ></TextBlock>
         <Button
             Grid.Row="5"
             Grid.Column="1"

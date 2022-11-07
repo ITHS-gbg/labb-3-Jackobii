@@ -5,8 +5,81 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Labb3_NET22.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Labb3_NET22.ViewModels"
+    d:DataContext="{d:DesignInstance viewModels:PlayQuizViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--Header-->
+        <Grid 
+            Grid.Row="0"  
+            Grid.Column="0" 
+            Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label 
+                Grid.Row="0"
+                Grid.Column="1"
+                Content="{Binding Score, UpdateSourceTrigger=PropertyChanged}"
+            />
+            <Label 
+                Grid.Row="0"
+                Grid.Column="2"
+                Content="{Binding QuestionsAnswered, UpdateSourceTrigger=PropertyChanged}"
+            />
+        </Grid>
+        <TextBlock 
+            Grid.Row="0" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="2"
+            />
+        <!--Question-->
+        <TextBlock 
+            Grid.Row="1" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="2"
+            Text="{Binding CurrentQuestion.Statement}"
+            Style="{DynamicResource TitleText}"
+            />
+        <!--Buttons-->
+        <Button 
+            Grid.Row="2" 
+            Grid.Column="0"
+            Content="{Binding CurrentQuestion.Answers[0]}"
+            Command="{Binding AnswerOneCommand}"
+            />
+        <Button 
+            Grid.Row="3" 
+            Grid.Column="0" 
+            Content="{Binding CurrentQuestion.Answers[1]}"
+            Command="{Binding AnswerTwoCommand}"
+            />
+        <Button 
+            Grid.Row="2" 
+            Grid.Column="1" 
+            Content="{Binding CurrentQuestion.Answers[2]}"
+            Command="{Binding AnswerThreeCommand}"
+            />
+        <Button 
+            Grid.Row="3" 
+            Grid.Column="1" 
+            Content="{Binding CurrentQuestion.Answers[3]}"
+            Command="{Binding AnswerFourCommand}"
+            />
+    </Grid>
 </UserControl>

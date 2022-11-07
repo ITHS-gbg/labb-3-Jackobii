@@ -35,6 +35,7 @@ public class CreateQuizViewModel : ObservableObject
         set
         {
             SetProperty(ref _title, value);
+            SaveQuizCommand.NotifyCanExecuteChanged();
         }
     }
     public string Statement
@@ -108,7 +109,13 @@ public class CreateQuizViewModel : ObservableObject
         }
     }
 
-
+    public bool IsQuestionSelected
+    {
+        get
+        {
+            return SelectedQuestion != null;
+        }
+    }
     public ObservableCollection<Question> Questions { get; set; } = new ();
 
     #region Checkbox Props
@@ -211,18 +218,25 @@ public class CreateQuizViewModel : ObservableObject
         _quizManager = quizManager;
 
         NavigateMainMenuCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new MainMenuViewModel(_navigationManager));
+            _navigationManager.CurrentViewModel = new MainMenuViewModel(_navigationManager, _quizManager));
 
         CreateQuestionCommand = new RelayCommand(CreateNewQuestion, CanCreateNewQuestion);
         DeleteQuestionCommand = new RelayCommand(DeleteSelectedQuestion, CanDeleteSelectedQuestion);
+        SaveQuizCommand = new RelayCommand(SaveNewQuiz, CanSaveNewQuiz);
+
+        Answers.CollectionChanged += Answers_CollectionChanged; 
     }
 
+    private void Answers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        CreateQuestionCommand.NotifyCanExecuteChanged();
+    }
     private void CreateNewQuestion()
     {
         Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer));
+        SaveQuizCommand.NotifyCanExecuteChanged();
         ClearAllFields();
     }
-
     public bool CanCreateNewQuestion()
     {
         return !string.IsNullOrEmpty(Statement) &&
@@ -232,17 +246,23 @@ public class CreateQuizViewModel : ObservableObject
                !string.IsNullOrEmpty(Answers[3]) &&
                CorrectAnswer is >= 0 and <= 3;
     }
-
     private void DeleteSelectedQuestion()
     {
         Questions.Remove(SelectedQuestion);
     }
-
     public bool CanDeleteSelectedQuestion()
     {
-        return false;
+        return IsQuestionSelected;
     }
-
+    public void SaveNewQuiz()
+    {
+        _quizManager.SaveQuiz(new Quiz(Title, Questions));
+        _navigationManager.CurrentViewModel = new ChooseQuizViewModel(_navigationManager, _quizManager);
+    }
+    private bool CanSaveNewQuiz()
+    {
+        return Title != null && Questions.Count > 0;
+    }
     private void ClearAllFields()
     {
         Statement = string.Empty;
@@ -251,10 +271,10 @@ public class CreateQuizViewModel : ObservableObject
         Answers[2] = string.Empty;
         Answers[3] = string.Empty;
         CorrectAnswer = 0;
-        _checkbox1 = false;
-        _checkbox2 = false;
-        _checkbox3 = false;
-        _checkbox4 = false;
+        //_checkbox1 = false;
+        //_checkbox2 = false;
+        //_checkbox3 = false;
+        //_checkbox4 = false;
         OnPropertyChanged(nameof(Checkbox1));
         OnPropertyChanged(nameof(Checkbox2));
         OnPropertyChanged(nameof(Checkbox3));

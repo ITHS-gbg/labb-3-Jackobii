@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System.Windows.Documents;
 
 namespace Labb3_NET22.DataModels;   
 
@@ -8,13 +11,22 @@ public class Quiz
 {
     private IEnumerable<Question> _questions;
     private string _title = string.Empty;
-    public IEnumerable<Question> Questions => _questions;
-    public string Title => _title;
+    public IEnumerable<Question> Questions
+    {
+        get { return _questions; }
+    }
+
+    public string Title
+    {
+        get { return _title; }
+    }
 
     public Quiz()
     {
         _questions = new List<Question>();
     }
+
+    [JsonConstructor]
     public Quiz(string title, IEnumerable<Question> questions)
     {
         _title = title;
@@ -25,16 +37,22 @@ public class Quiz
 
     public Question GetRandomQuestion()
     {
-        throw new NotImplementedException("A random Question needs to be returned here!");
+        Random rnd = new Random();
+        int rndQuestionIndex = rnd.Next(_questions.Count());
+        Question rndQuestion = _questions.ElementAt(rndQuestionIndex);
+        RemoveQuestion(rndQuestionIndex);
+        return rndQuestion; 
+        // TODO tills _questions innehåller 0 frågor? Kanske fixas i play
     }
 
     public void AddQuestion(string statement, int correctAnswer, params string[] answers)
     {
-        throw new NotImplementedException("Question need to be instantiated and added to list of questions here!");
+        var newQuestion = new Question(statement, answers, correctAnswer);
+        ((ObservableCollection<Question>)_questions)?.Add(newQuestion);
     }
 
     public void RemoveQuestion(int index)
     {
-        throw new NotImplementedException("Question at requested index need to be removed here!");
+        ((List<Question>)_questions).RemoveAt(index);
     }
 }

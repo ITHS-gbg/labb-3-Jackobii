@@ -233,9 +233,17 @@ public class CreateQuizViewModel : ObservableObject
     }
     private void CreateNewQuestion()
     {
-        Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer));
-        SaveQuizCommand.NotifyCanExecuteChanged();
-        ClearAllFields();
+        if (Questions.Contains(SelectedQuestion))
+        {
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer));
+            Questions.Remove(SelectedQuestion);
+        }
+        else
+        {
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer));
+            SaveQuizCommand.NotifyCanExecuteChanged();
+            ClearAllFields();
+        }
     }
     public bool CanCreateNewQuestion()
     {

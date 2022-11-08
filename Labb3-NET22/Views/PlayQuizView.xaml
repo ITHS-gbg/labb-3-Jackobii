@@ -34,13 +34,21 @@
             </Grid.ColumnDefinitions>
             <Label 
                 Grid.Row="0"
-                Grid.Column="1"
-                Content="{Binding Score, UpdateSourceTrigger=PropertyChanged}"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                FontSize="20"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Left"
+                Content="{Binding UserScore, UpdateSourceTrigger=PropertyChanged}"
             />
             <Label 
                 Grid.Row="0"
                 Grid.Column="2"
-                Content="{Binding QuestionsAnswered, UpdateSourceTrigger=PropertyChanged}"
+                Grid.ColumnSpan="2"
+                FontSize="20"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Right"
+                Content="{Binding PossibleScore, UpdateSourceTrigger=PropertyChanged}"
             />
         </Grid>
         <TextBlock 

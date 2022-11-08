@@ -15,22 +15,41 @@ public class PlayQuizViewModel : ObservableObject
     private int _quizLength;
     private int _correctAnswer;
     private Question _currentQuestion;
+    private int _questionsAnswered = 0;
+    private int _score = 0;
 
-    public int QuestionsAnswered { get; set; } = 0;
+    public int QuestionsAnswered {
+        get => _questionsAnswered;
+        set { _questionsAnswered = value; OnPropertyChanged(nameof(PossibleScore)); }
+    }
 
-    public int Score { get; set; } = 0;
+    public int Score
+    {
+        get { return _score; }
+        set { _score = value; OnPropertyChanged(nameof(UserScore)); }
+    }
+    public string UserScore
+    {
+        get { return $"Din poäng: {Score}"; }
+    }
+
+    public string PossibleScore
+    {
+        get { return $"Besvarade frågor: {QuestionsAnswered}"; }
+    }
 
     public Question CurrentQuestion
     {
-        get => _currentQuestion;
+        get { return _currentQuestion; }
         set
         {
             SetProperty(ref _currentQuestion, value);
         }
     }
+
     public int CorrectAnswer
     {
-        get => _correctAnswer;
+        get { return _correctAnswer; }
         set
         {
             SetProperty(ref _correctAnswer, value);
@@ -111,7 +130,8 @@ public class PlayQuizViewModel : ObservableObject
         if (!_quiz.Questions.Any())
         {
             _navigationManager.CurrentViewModel =
-                new ScoreboardViewModel(_navigationManager, _quizManager, Score, QuestionsAnswered); // TODO
+                new ScoreboardViewModel(_navigationManager, _quizManager, Score, QuestionsAnswered);
+            return;
         }
 
         CurrentQuestion = _quiz.GetRandomQuestion();

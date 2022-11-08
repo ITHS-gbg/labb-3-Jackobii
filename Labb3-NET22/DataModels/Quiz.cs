@@ -37,6 +37,8 @@ public class Quiz
 
     public Question GetRandomQuestion()
     {
+        if (!_questions.Any()) return null;
+
         Random rnd = new Random();
         int rndQuestionIndex = rnd.Next(_questions.Count());
         Question rndQuestion = _questions.ElementAt(rndQuestionIndex);

@@ -22,7 +22,7 @@ public class QuizManager
     {
         LoadAllQuizzes();
     }
-    private void LoadAllQuizzes()
+    private async void LoadAllQuizzes()
     {
         if (File.Exists(myQuizPath))
         {
@@ -30,26 +30,29 @@ public class QuizManager
             string? line = string.Empty;
             using StreamReader sr = new StreamReader(myQuizPath);
 
-            while ((line = sr.ReadLine()) != null)
-            {
-                text += line;
-            }
+            //while ((line = sr.ReadLine()) != null)
+            //{
+            //    text += line;
+            //}
+
+            text = await sr.ReadToEndAsync();
             _allQuizzes = JsonSerializer.Deserialize<ObservableCollection<Quiz>>(text);
         }
     }
 
-    public void SaveQuiz()
-    {
-        var json = JsonSerializer.Serialize(_allQuizzes, new JsonSerializerOptions { WriteIndented = true });
-        using StreamWriter sw = new StreamWriter(myQuizPath);
-        sw.WriteLine(json);
-    }
-    public void SaveQuiz(Quiz quiz)
+    public async void SaveQuiz()
     {
         if (!File.Exists(myDirectoryPath))
         {
             Directory.CreateDirectory(myDirectoryPath);
         }
+
+        var json = JsonSerializer.Serialize(_allQuizzes, new JsonSerializerOptions { WriteIndented = true });
+        using StreamWriter sw = new StreamWriter(myQuizPath);
+        await sw.WriteAsync(json);
+    }
+    public void SaveQuiz(Quiz quiz)
+    {
         ((ObservableCollection<Quiz>)_allQuizzes).Add(quiz);
         SaveQuiz();
     }

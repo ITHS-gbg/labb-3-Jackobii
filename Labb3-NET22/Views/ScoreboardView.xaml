@@ -33,13 +33,15 @@
             Grid.Column="0"
             Grid.ColumnSpan="70"
             Style="{DynamicResource TitleText}"
-            Text="Det där gick väl bra!" />
+            Text="{Binding ScoreboardTitle}" />
         <TextBlock 
             Grid.Row="2" 
-            Grid.Column="2" 
-            Grid.ColumnSpan="3"
-            Text="{Binding Score, UpdateSourceTrigger=PropertyChanged, 
-            StringFormat='Du svarade rätt på {0}'}"
+            Grid.RowSpan="2"
+            Grid.Column="1" 
+            Grid.ColumnSpan="5"
+            FontSize="28"
+            FontWeight="Bold"
+            Text="{Binding TotalScore, UpdateSourceTrigger=PropertyChanged}"
             ></TextBlock>
         <Button
             Grid.Row="5"

@@ -264,7 +264,7 @@ public class CreateQuizViewModel : ObservableObject
     }
     public void SaveNewQuiz()
     {
-        _quizManager.SaveQuiz(new Quiz(Title, Questions));
+        _quizManager.SaveToFileQuiz(new Quiz(Title, Questions));
         _navigationManager.CurrentViewModel = new ChooseQuizViewModel(_navigationManager, _quizManager);
     }
     private bool CanSaveNewQuiz()

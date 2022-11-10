@@ -47,9 +47,9 @@ public class Quiz
         // TODO tills _questions innehåller 0 frågor? Kanske fixas i play
     }
 
-    public void AddQuestion(string statement, int correctAnswer, params string[] answers)
+    public void AddQuestion(string statement, int correctAnswer, string pictureFilePath, Category category, params string[] answers)
     {
-        var newQuestion = new Question(statement, answers, correctAnswer);
+        var newQuestion = new Question(statement, answers, correctAnswer, pictureFilePath, category);
         ((ObservableCollection<Question>)_questions)?.Add(newQuestion);
     }
 

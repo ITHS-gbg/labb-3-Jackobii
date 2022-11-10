@@ -16,12 +16,15 @@ public class QuizManager
     private IEnumerable<Quiz> _allQuizzes = new ObservableCollection<Quiz>();
     private readonly string _myDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder");
     private string _myQuizPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder", "quiz.json");
+    private readonly string _noImagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder", "noImage.jpg");
 
     public string MyQuizPath
     {
         get { return _myQuizPath; }
         set { _myQuizPath = value; }
     }
+    public string NoImagePath => _noImagePath;
+
     public IEnumerable<Quiz> AllQuizzes => _allQuizzes;
     public QuizManager()
     {
@@ -73,7 +76,6 @@ public class QuizManager
         using StreamWriter sw = new StreamWriter(MyQuizPath); 
         await sw.WriteAsync(json);
     }
-
     public string GenerateQuizFolderName(Quiz quiz) // DONE
     {
         string quizFolderName = quiz.Title;
@@ -95,4 +97,5 @@ public class QuizManager
     {
         MyQuizPath = Path.Combine(_myDirectoryPath, folderName, "quiz.json");
     }
+
 }

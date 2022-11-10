@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Labb3_NET22.DataModels;
 using Labb3_NET22.Managers;
+using Microsoft.Win32;
 
 namespace Labb3_NET22.ViewModels;
 
@@ -19,10 +21,13 @@ public class CreateQuizViewModel : ObservableObject
     private ObservableCollection<string> _answers = new () { string.Empty, string.Empty, string.Empty, string.Empty};
     private int _correctAnswer;
     private Question? _selectedQuestion;
+    private string _pictureFilePath;
+    private Category? _selectedCategory;
+    
 
     #region Checkbox Fields
 
-    private bool _checkbox1;
+    private bool _checkbox1 = true;
     private bool _checkbox2;
     private bool _checkbox3;
     private bool _checkbox4;
@@ -86,7 +91,6 @@ public class CreateQuizViewModel : ObservableObject
             CreateQuestionCommand.NotifyCanExecuteChanged();
         }
     }
-
     public Question? SelectedQuestion
     {
         get => _selectedQuestion;
@@ -101,6 +105,8 @@ public class CreateQuizViewModel : ObservableObject
                 Answers[2] = value.Answers[2];
                 Answers[3] = value.Answers[3];
                 CorrectAnswer = value.CorrectAnswer;
+                PictureFilePath = value.QuestionPicturePath;
+                SelectedCategory = value.QuestionCategory;
             }
             else
             {
@@ -108,7 +114,6 @@ public class CreateQuizViewModel : ObservableObject
             }
         }
     }
-
     public bool IsQuestionSelected
     {
         get
@@ -117,7 +122,34 @@ public class CreateQuizViewModel : ObservableObject
         }
     }
     public ObservableCollection<Question> Questions { get; set; } = new ();
+    public string PictureFilePath
+    {
+        get 
+        {
+            if (string.IsNullOrEmpty(_pictureFilePath))
+            {
+                return _quizManager.NoImagePath;
+            }
+            return _pictureFilePath;
+        }
+        set
+        {
+            SetProperty(ref _pictureFilePath, value);
+            RemovePictureCommand.NotifyCanExecuteChanged();
+        }
+    }
+    public Category? SelectedCategory 
+    {
+        get => _selectedCategory;
+        set
+        {
+            SetProperty(ref _selectedCategory, value);
+            CreateQuestionCommand.NotifyCanExecuteChanged();
+        }
+    }
 
+    public ObservableCollection<string> ListOfCategories { get; } = new(Enum.GetNames(typeof(Category)));
+    
     #region Checkbox Props
 
     public bool Checkbox1
@@ -211,6 +243,8 @@ public class CreateQuizViewModel : ObservableObject
     public IRelayCommand CreateQuestionCommand { get; }
     public IRelayCommand DeleteQuestionCommand { get; }
     public IRelayCommand SaveQuizCommand { get; }
+    public IRelayCommand AddPictureCommand { get; }
+    public IRelayCommand RemovePictureCommand { get; }
 
     public CreateQuizViewModel(NavigationManager navigationManager, QuizManager quizManager)
     {
@@ -223,8 +257,10 @@ public class CreateQuizViewModel : ObservableObject
         CreateQuestionCommand = new RelayCommand(CreateNewQuestion, CanCreateNewQuestion);
         DeleteQuestionCommand = new RelayCommand(DeleteSelectedQuestion, CanDeleteSelectedQuestion);
         SaveQuizCommand = new RelayCommand(SaveNewQuiz, CanSaveNewQuiz);
+        AddPictureCommand = new RelayCommand(AddPicture);
+        RemovePictureCommand = new RelayCommand(DeletePicture, CanDeletePicture);
 
-        Answers.CollectionChanged += Answers_CollectionChanged; 
+        Answers.CollectionChanged += Answers_CollectionChanged;
     }
 
     private void Answers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -235,19 +271,20 @@ public class CreateQuizViewModel : ObservableObject
     {
         if (Questions.Contains(SelectedQuestion))
         {
-            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer));
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategory)!);
             Questions.Remove(SelectedQuestion);
         }
         else
         {
-            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer));
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategory)!);
             SaveQuizCommand.NotifyCanExecuteChanged();
             ClearAllFields();
         }
     }
     public bool CanCreateNewQuestion()
     {
-        return !string.IsNullOrEmpty(Statement) &&
+        return SelectedCategory != null &&
+               !string.IsNullOrEmpty(Statement) &&
                !string.IsNullOrEmpty(Answers[0]) &&
                !string.IsNullOrEmpty(Answers[1]) &&
                !string.IsNullOrEmpty(Answers[2]) &&
@@ -279,13 +316,31 @@ public class CreateQuizViewModel : ObservableObject
         Answers[2] = string.Empty;
         Answers[3] = string.Empty;
         CorrectAnswer = 0;
-        //_checkbox1 = false;
-        //_checkbox2 = false;
-        //_checkbox3 = false;
-        //_checkbox4 = false;
+        SelectedCategory = null;
+        PictureFilePath = string.Empty;
         OnPropertyChanged(nameof(Checkbox1));
         OnPropertyChanged(nameof(Checkbox2));
         OnPropertyChanged(nameof(Checkbox3));
         OnPropertyChanged(nameof(Checkbox4));
     }
+    public void AddPicture()
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        openFileDialog.Filter = "Image files (*.png; *.bmp; *.svg; *.jpeg)|*.png; *.bmp; *.svg; *.jpeg;*.jpg|All files (*.*)|*.*";
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            PictureFilePath = openFileDialog.FileName;
+        }
+    }
+    public void DeletePicture()
+    {
+        PictureFilePath = string.Empty;
+    }
+    public bool CanDeletePicture()
+    {
+        return !string.IsNullOrEmpty(_pictureFilePath);
+    }
+
 }

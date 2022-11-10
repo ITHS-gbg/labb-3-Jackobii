@@ -61,21 +61,41 @@
                 Margin="6,3"
                 Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
+        <!--Category-->
+        <StackPanel Grid.Row="1" 
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3">
+            <Label Content="Välj kategori"></Label>
+            <ComboBox 
+                Margin="28 0 28 0"
+                Text=""
+                ItemsSource="{Binding ListOfCategories, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+        </StackPanel>
+        
         <!--List of Questions-->
-        <ListView
-            Grid.Row="1"
-            Grid.RowSpan="6"
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Margin="28,20" 
-            ItemsSource="{Binding Questions, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding SelectedQuestion}">
+        <DockPanel Grid.Row="2"
+                    Grid.RowSpan="5"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    >
+            <Label 
+                Content="Frågor: " 
+                DockPanel.Dock="Top">
+            </Label>
+            <ListView
+                Margin="28,4 28 20" 
+                ItemsSource="{Binding Questions, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedQuestion}">
+
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Statement}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        </DockPanel>
         <!--Statement-->
         <TextBox
             Grid.Row="1"
@@ -86,14 +106,42 @@
             Text="{Binding Statement, UpdateSourceTrigger=PropertyChanged}"
             />
         <!--Image-->
-        <Image
-            Grid.Row="1"
-            Grid.RowSpan="3"
-            Grid.Column="7"
-            Grid.ColumnSpan="3"
-            Margin="5 20 5 0"
-            Source="../ExamplePics/SwagMoma.jpeg" />
-        <!--Answers-->
+        <Grid Grid.Row="1"
+              Grid.RowSpan="3"
+              Grid.Column="7"
+              Grid.ColumnSpan="3"
+              Margin="5 20 5 0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"  Grid.ColumnSpan="5" 
+                   Stretch="Uniform"
+                    Source="{Binding PictureFilePath, UpdateSourceTrigger = PropertyChanged}" />
+            <Button 
+                Grid.Row="2" 
+                Grid.Column="5"
+                FontSize="8"
+                Content="Lägg till"
+                Command="{Binding AddPictureCommand}"></Button>
+            <Button 
+                Grid.Row="3" 
+                Grid.Column="5"
+                FontSize="8"
+                Content="Ta bort"
+                Command="{Binding DeleteQuestionCommand}"></Button>
+</Grid>
+            <!--Answers-->
         <Grid
             Grid.Row="4"
             Grid.RowSpan="3"

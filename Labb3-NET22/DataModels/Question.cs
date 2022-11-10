@@ -1,22 +1,19 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
-using System.Text.Json.Serialization;
-
-namespace Labb3_NET22.DataModels;
+﻿namespace Labb3_NET22.DataModels;
 
 public class Question
 {
-    [JsonInclude]
     public string Statement { get; }
-    [JsonInclude]
     public string[] Answers { get; }
-    [JsonInclude]
     public int CorrectAnswer { get; }
+    public string QuestionPicturePath  { get; set; }
+    public Category QuestionCategory { get; }
 
-    public Question(string statement, string[] answers, int correctAnswer)
+    public Question(string statement, string[] answers, int correctAnswer, string questionPicturePath, Category questionCategory)
     {
         Statement = statement;
         Answers = answers;
         CorrectAnswer = correctAnswer;
+        QuestionPicturePath = questionPicturePath;
+        QuestionCategory = questionCategory;
     }
 }

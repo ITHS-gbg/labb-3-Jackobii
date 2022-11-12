@@ -11,11 +11,11 @@ public class Quiz
 {
     private IEnumerable<Question> _questions;
     private string _title = string.Empty;
+
     public IEnumerable<Question> Questions
     {
         get { return _questions; }
     }
-
     public string Title
     {
         get { return _title; }
@@ -47,7 +47,7 @@ public class Quiz
         // TODO tills _questions innehåller 0 frågor? Kanske fixas i play
     }
 
-    public void AddQuestion(string statement, int correctAnswer, string pictureFilePath, Category category, params string[] answers)
+    public void AddQuestion(string statement, int correctAnswer, string pictureFilePath, Category category, string[] answers)
     {
         var newQuestion = new Question(statement, answers, correctAnswer, pictureFilePath, category);
         ((ObservableCollection<Question>)_questions)?.Add(newQuestion);

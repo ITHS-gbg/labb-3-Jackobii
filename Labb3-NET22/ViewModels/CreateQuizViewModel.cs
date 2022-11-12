@@ -22,8 +22,8 @@ public class CreateQuizViewModel : ObservableObject
     private int _correctAnswer;
     private Question? _selectedQuestion;
     private string _pictureFilePath;
-    private Category? _selectedCategory;
-    
+    private int _selectedCategoryIndex = 0;
+
 
     #region Checkbox Fields
 
@@ -106,7 +106,7 @@ public class CreateQuizViewModel : ObservableObject
                 Answers[3] = value.Answers[3];
                 CorrectAnswer = value.CorrectAnswer;
                 PictureFilePath = value.QuestionPicturePath;
-                SelectedCategory = value.QuestionCategory;
+                SelectedCategoryIndex = (int)value.QuestionCategory;
             }
             else
             {
@@ -138,17 +138,16 @@ public class CreateQuizViewModel : ObservableObject
             RemovePictureCommand.NotifyCanExecuteChanged();
         }
     }
-    public Category? SelectedCategory 
+    public ObservableCollection<string> ListOfCategories { get; } = new(Enum.GetNames(typeof(Category)));
+    public int SelectedCategoryIndex
     {
-        get => _selectedCategory;
+        get { return _selectedCategoryIndex; }
         set
         {
-            SetProperty(ref _selectedCategory, value);
+            SetProperty(ref _selectedCategoryIndex, value);
             CreateQuestionCommand.NotifyCanExecuteChanged();
         }
     }
-
-    public ObservableCollection<string> ListOfCategories { get; } = new(Enum.GetNames(typeof(Category)));
     
     #region Checkbox Props
 
@@ -271,25 +270,25 @@ public class CreateQuizViewModel : ObservableObject
     {
         if (Questions.Contains(SelectedQuestion))
         {
-            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategory)!);
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategoryIndex));
             Questions.Remove(SelectedQuestion);
         }
         else
         {
-            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategory)!);
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategoryIndex));
             SaveQuizCommand.NotifyCanExecuteChanged();
             ClearAllFields();
         }
     }
     public bool CanCreateNewQuestion()
     {
-        return SelectedCategory != null &&
-               !string.IsNullOrEmpty(Statement) &&
-               !string.IsNullOrEmpty(Answers[0]) &&
-               !string.IsNullOrEmpty(Answers[1]) &&
-               !string.IsNullOrEmpty(Answers[2]) &&
-               !string.IsNullOrEmpty(Answers[3]) &&
-               CorrectAnswer is >= 0 and <= 3;
+        return
+            !string.IsNullOrEmpty(Statement) &&
+            !string.IsNullOrEmpty(Answers[0]) &&
+            !string.IsNullOrEmpty(Answers[1]) &&
+            !string.IsNullOrEmpty(Answers[2]) &&
+            !string.IsNullOrEmpty(Answers[3]) &&
+            CorrectAnswer is >= 0 and <= 3;
     }
     private void DeleteSelectedQuestion()
     {
@@ -302,6 +301,7 @@ public class CreateQuizViewModel : ObservableObject
     public void SaveNewQuiz()
     {
         _quizManager.SaveToFileQuiz(new Quiz(Title, Questions));
+
         _navigationManager.CurrentViewModel = new ChooseQuizViewModel(_navigationManager, _quizManager);
     }
     private bool CanSaveNewQuiz()
@@ -316,7 +316,7 @@ public class CreateQuizViewModel : ObservableObject
         Answers[2] = string.Empty;
         Answers[3] = string.Empty;
         CorrectAnswer = 0;
-        SelectedCategory = null;
+        SelectedCategoryIndex = 0;
         PictureFilePath = string.Empty;
         OnPropertyChanged(nameof(Checkbox1));
         OnPropertyChanged(nameof(Checkbox2));
@@ -342,5 +342,4 @@ public class CreateQuizViewModel : ObservableObject
     {
         return !string.IsNullOrEmpty(_pictureFilePath);
     }
-
 }

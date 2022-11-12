@@ -34,19 +34,31 @@
             Grid.ColumnSpan="5"
             Style="{DynamicResource TitleText}"
             Text="Välj en kategori!" />
-        <ListView
+        <TabControl
             Grid.Row="1"
             Grid.RowSpan="4"
             Grid.Column="1"
             Grid.ColumnSpan="5"
-            ItemsSource="{Binding AllQuizzes}"
-            SelectedItem="{Binding SelectedQuiz}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Title}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            SelectedIndex="{Binding SelectedTab}">
+            <TabItem Width="Auto" Header="Färdiga quiz">
+                <ListView
+                    ItemsSource="{Binding AllQuizzes}"
+                    SelectedItem="{Binding SelectedQuiz}"
+                    SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Title}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Width="Auto" Header="Kategorier">
+                <ListView
+                    ItemsSource="{Binding CategoryQuizzes}"
+                    SelectedIndex="{Binding SelectedCategoryIndex}"
+                    SelectionMode="Multiple" />
+            </TabItem>
+        </TabControl>
         <Button
             Grid.Row="5"
             Grid.Column="1"
@@ -56,7 +68,8 @@
             Grid.Row="5"
             Grid.Column="2"
             Command="{Binding DeleteQuizCommand}"
-            Content="Delete" />
+            Content="Delete"
+            Visibility="{Binding HideButtons}" />
         <Grid
             Grid.Row="5"
             Grid.Column="4"
@@ -68,7 +81,8 @@
             <Button
                 Grid.Column="0"
                 Command="{Binding NavigateEditQuizCommand}"
-                Content="Redigera" />
+                Content="Redigera"
+                Visibility="{Binding HideButtons}" />
             <Button
                 Grid.Column="1"
                 Command="{Binding NavigatePlayQuizCommand}"

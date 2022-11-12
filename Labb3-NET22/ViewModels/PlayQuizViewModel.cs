@@ -17,6 +17,8 @@ public class PlayQuizViewModel : ObservableObject
     private Question _currentQuestion;
     private int _questionsAnswered = 0;
     private int _score = 0;
+    private string _pictureFilePath;
+    private bool _questionGotPicture;
 
     public int QuestionsAnswered {
         get => _questionsAnswered;
@@ -55,6 +57,22 @@ public class PlayQuizViewModel : ObservableObject
             SetProperty(ref _correctAnswer, value);
         }
     }
+
+    public string PictureFilePath
+    {
+        get { return _pictureFilePath; }
+        set
+        {
+            SetProperty(ref _pictureFilePath, value);
+        }
+    }
+
+    public bool QuestionGotPicture
+    {
+        get { return _questionGotPicture; }
+        set { SetProperty(ref _questionGotPicture, value); }
+    }
+
 
     public IRelayCommand AnswerOneCommand { get; }
     public IRelayCommand AnswerTwoCommand { get; }
@@ -136,11 +154,26 @@ public class PlayQuizViewModel : ObservableObject
 
         CurrentQuestion = _quiz.GetRandomQuestion();
         CorrectAnswer = CurrentQuestion.CorrectAnswer;
-
+        UpdatePictureFilePath();
     }
+
     private void UpdateQuestionsAnswered()
     {
         QuestionsAnswered++;
         OnPropertyChanged(nameof(QuestionsAnswered));
+    }
+
+    private void UpdatePictureFilePath()
+    {
+        if (CurrentQuestion.QuestionPicturePath != _quizManager.NoImagePath)
+        {
+            PictureFilePath = CurrentQuestion.QuestionPicturePath;
+            QuestionGotPicture = true;
+        }
+        else
+        {
+            PictureFilePath = string.Empty;
+            QuestionGotPicture = false;
+        }
     }
 }

@@ -51,20 +51,56 @@
                 Content="{Binding PossibleScore, UpdateSourceTrigger=PropertyChanged}"
             />
         </Grid>
-        <TextBlock 
-            Grid.Row="0" 
-            Grid.Column="0" 
-            Grid.ColumnSpan="2"
-            />
         <!--Question-->
-        <TextBlock 
+        <Grid 
             Grid.Row="1" 
             Grid.Column="0" 
-            Grid.ColumnSpan="2"
-            Text="{Binding CurrentQuestion.Statement}"
-            Style="{DynamicResource TitleText}"
+            Grid.ColumnSpan="2">
+            <Grid.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding QuestionGotPicture, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <Setter Property="Grid.Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <TextBlock 
+                Text="{Binding CurrentQuestion.Statement}"
+                Style="{DynamicResource TitleText}"
             />
-        <!--Buttons-->
+         </Grid>
+        <Grid 
+            Grid.Row="1" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding QuestionGotPicture, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                            <Setter Property="Grid.Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <TextBlock Grid.Column="0"
+                Text="{Binding CurrentQuestion.Statement}"
+                TextWrapping="Wrap"
+                Style="{DynamicResource StatementText}"
+                />
+            <Image 
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Stretch="Uniform"
+                Source="{Binding PictureFilePath, UpdateSourceTrigger = PropertyChanged}" 
+            />
+        </Grid>
+    <!--Buttons-->
         <Button 
             Grid.Row="2" 
             Grid.Column="0"

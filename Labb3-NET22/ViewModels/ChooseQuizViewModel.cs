@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Labb3_NET22.DataModels;
@@ -12,11 +15,36 @@ public class ChooseQuizViewModel : ObservableObject
     private NavigationManager _navigationManager;
     private QuizManager _quizManager;
     private Quiz _selectedQuiz;
-    public IEnumerable<Quiz> AllQuizzes => _quizManager.AllQuizzes;
+    private int _selectedCategoryIndex;
+    private int _selectedTab;
+    public ObservableCollection<Quiz> AllQuizzes => (ObservableCollection<Quiz>)_quizManager.AllQuizzes;
+    public string[] CategoryQuizzes => Enum.GetNames(typeof(Category));
+
+    public int SelectedCategoryIndex
+    {
+        get => _selectedCategoryIndex;
+        set
+        {
+            SetProperty(ref _selectedCategoryIndex, value);
+        }
+    }
+    public int SelectedTab
+    {
+        get
+        {
+            return _selectedTab;
+        }
+        set
+        {
+            SetProperty(ref _selectedTab, value);
+            DeleteQuizCommand.NotifyCanExecuteChanged();
+            NavigateEditQuizCommand.NotifyCanExecuteChanged();
+        }
+    }
     public Quiz SelectedQuiz
     {
         get => _selectedQuiz;
-        set => SetProperty(ref _selectedQuiz, value);
+        set { SetProperty(ref _selectedQuiz, value); DeleteQuizCommand.NotifyCanExecuteChanged(); }
     }
 
     public IRelayCommand NavigatePlayQuizCommand { get; }
@@ -32,10 +60,10 @@ public class ChooseQuizViewModel : ObservableObject
         NavigatePlayQuizCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new PlayQuizViewModel(_navigationManager, _quizManager, PlaySelectedQuiz()));
         NavigateEditQuizCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new EditQuizViewModel(_navigationManager, _quizManager));
+            _navigationManager.CurrentViewModel = new EditQuizViewModel(_navigationManager, _quizManager, SelectedQuiz));
         NavigateMainMenuCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new MainMenuViewModel(_navigationManager, _quizManager));
-        DeleteQuizCommand = new RelayCommand(DeleteSelectedQuizCommand);
+        DeleteQuizCommand = new RelayCommand(DeleteSelectedQuizCommand, CanDeleteSelectedQuizCommand);
     }
 
     public Quiz PlaySelectedQuiz()
@@ -44,6 +72,20 @@ public class ChooseQuizViewModel : ObservableObject
     }
     public void DeleteSelectedQuizCommand()
     {
-        _quizManager.RemoveQuiz(SelectedQuiz);
+        _quizManager.DeleteQuiz(SelectedQuiz);
+    }
+
+    public bool CanDeleteSelectedQuizCommand()
+    {
+        return SelectedQuiz != null;
+    }
+
+    public bool HideButtons()
+    {
+        if (SelectedTab == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.OleDb;
 using System.DirectoryServices;
 using System.IO;
 using System.Linq;
@@ -15,8 +16,8 @@ public class QuizManager
 {
     private IEnumerable<Quiz> _allQuizzes = new ObservableCollection<Quiz>();
     private readonly string _myDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder");
-    private string _myQuizPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder", "quiz.json");
-    private readonly string _noImagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder", "noImage.jpg");
+    private readonly string _noImagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JacobFQuizFolder", "noImage.png");
+    private string _myQuizPath;
 
     public string MyQuizPath
     {
@@ -25,7 +26,7 @@ public class QuizManager
     }
     public string NoImagePath => _noImagePath;
 
-    public IEnumerable<Quiz> AllQuizzes => _allQuizzes;
+    public IEnumerable<Quiz> AllQuizzes => (ObservableCollection<Quiz>)_allQuizzes;
     public QuizManager()
     {
         LoadAllQuizzes();
@@ -50,7 +51,14 @@ public class QuizManager
         ((ObservableCollection<Quiz>)_allQuizzes).Remove(quiz); // Ta bort ur den globala listan
 
         string folderPath = GenerateQuizFolderName(quiz);
+        File.Delete(Path.Combine(_myDirectoryPath, folderPath, "quiz.json"));
+    }
+    public void DeleteQuiz(Quiz quiz)
+    {
+        ((ObservableCollection<Quiz>)AllQuizzes).Remove(quiz);
+        string folderPath = GenerateQuizFolderName(quiz);
         Directory.Delete(Path.Combine(_myDirectoryPath, folderPath), true);
+        
     }
     public void UpdateExistingQuiz(Quiz oldQuiz, Quiz newQuiz)
     {
@@ -65,7 +73,9 @@ public class QuizManager
     {
         string folderName = GenerateQuizFolderName(quiz);
         GenerateQuizDirectory(folderName);
+        GeneratePictureFolder(folderName);
         UpdateMyQuizPath(folderName);
+        CopyPicturesToQuizFolder(quiz);
         SaveQuiz(quiz);
     }
     public async Task SaveQuiz(Quiz quiz) // DONE
@@ -97,5 +107,35 @@ public class QuizManager
     {
         MyQuizPath = Path.Combine(_myDirectoryPath, folderName, "quiz.json");
     }
-
+    public void GeneratePictureFolder(string quizFolderName)
+    {
+        if (!string.IsNullOrEmpty(quizFolderName))
+        {
+            string pictureFolderPath = Path.Combine(_myDirectoryPath, quizFolderName, "Pictures");
+            if (!File.Exists(pictureFolderPath))
+            {
+                Directory.CreateDirectory(pictureFolderPath);
+            }
+        }
+    } // DONE
+    public void CopyPicturesToQuizFolder(Quiz quiz)
+    {
+        string newPicturePath = Path.Combine(_myDirectoryPath, GenerateQuizFolderName(quiz), "Pictures");
+        foreach (var q in quiz.Questions)
+        {
+            string oldPicturePath = q.QuestionPicturePath;
+            if (!File.Exists(Path.Combine(newPicturePath, Path.GetFileName(oldPicturePath))))
+            {
+                File.Copy(oldPicturePath, (Path.Combine(newPicturePath, Path.GetFileName(oldPicturePath))), true);
+            }
+            q.QuestionPicturePath = Path.Combine(newPicturePath, Path.GetFileName(oldPicturePath));
+        }
+    } // DONE
+    //public Quiz GenerateRandomQuiz(int[] index)
+    //{
+    //    foreach (var qstn in AllQuizzes.SelectMany(qz => qz.Questions))
+    //    {
+    //        qstn.QuestionCategory 
+    //    }
+    //}
 }

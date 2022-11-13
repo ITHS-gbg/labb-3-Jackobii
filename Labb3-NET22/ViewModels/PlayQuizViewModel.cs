@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Labb3_NET22.DataModels;
@@ -96,6 +98,7 @@ public class PlayQuizViewModel : ObservableObject
 
 
         _quizLength = quiz.Questions.Count();
+
         DisplayNewQuestion();
     }
 
@@ -143,10 +146,11 @@ public class PlayQuizViewModel : ObservableObject
         DisplayNewQuestion();
     }
 
-    private void DisplayNewQuestion()
+    private async Task DisplayNewQuestion()
     {
         if (!_quiz.Questions.Any())
         {
+            await Task.Delay(500);
             _navigationManager.CurrentViewModel =
                 new ScoreboardViewModel(_navigationManager, _quizManager, Score, QuestionsAnswered);
             return;
@@ -165,7 +169,7 @@ public class PlayQuizViewModel : ObservableObject
 
     private void UpdatePictureFilePath()
     {
-        if (CurrentQuestion.QuestionPicturePath != _quizManager.NoImagePath)
+        if (CurrentQuestion.QuestionPicturePath != _quizManager.NoImagePath || CurrentQuestion.QuestionPicturePath != string.Empty)
         {
             PictureFilePath = CurrentQuestion.QuestionPicturePath;
             QuestionGotPicture = true;

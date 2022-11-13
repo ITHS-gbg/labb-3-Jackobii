@@ -69,9 +69,7 @@
             Grid.Column="2"
             Command="{Binding DeleteQuizCommand}"
             Content="Delete"
-            Visibility="Visible">
-
-        </Button>
+            Visibility="Visible" />
 
         <Grid
             Grid.Row="5"

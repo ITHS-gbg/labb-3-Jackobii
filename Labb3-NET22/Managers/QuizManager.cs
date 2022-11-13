@@ -138,6 +138,6 @@ public class QuizManager
                 questionList.Add(qstn);
             }
         }
-        return new Quiz("Kategori Quiz", questionList);
+        return new Quiz($"{(Category)index} Quiz", questionList);
     }
 }

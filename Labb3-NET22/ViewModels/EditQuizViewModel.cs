@@ -270,7 +270,6 @@ public class EditQuizViewModel : ObservableObject
         {
             Questions.Add(question);
         }
-
     }
 
     private void Answers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -281,7 +280,7 @@ public class EditQuizViewModel : ObservableObject
     {
         if (Questions.Contains(SelectedQuestion))
         {
-            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategoryIndex));
+            _quiz.AddQuestion(Statement, CorrectAnswer, PictureFilePath, (Category)SelectedCategoryIndex, Answers.ToArray() );
             Questions.Remove(SelectedQuestion);
         }
         else

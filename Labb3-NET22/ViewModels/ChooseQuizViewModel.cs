@@ -29,7 +29,7 @@ public class ChooseQuizViewModel : ObservableObject
         set
         {
             SetProperty(ref _selectedCategoryIndex, value);
-            DisableButtons();
+            NullSelectedQuiz();
         }
     }
 
@@ -58,6 +58,7 @@ public class ChooseQuizViewModel : ObservableObject
             SetProperty(ref _selectedQuiz, value);
             DeleteQuizCommand.NotifyCanExecuteChanged(); 
             NavigateEditQuizCommand.NotifyCanExecuteChanged();
+            NavigatePlayQuizCommand.NotifyCanExecuteChanged();
         }
     }
 
@@ -72,7 +73,7 @@ public class ChooseQuizViewModel : ObservableObject
         _quizManager = quizManager;
 
         NavigatePlayQuizCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new PlayQuizViewModel(_navigationManager, _quizManager, PlaySelectedQuiz()));
+            _navigationManager.CurrentViewModel = new PlayQuizViewModel(_navigationManager, _quizManager, PlaySelectedQuiz()), IsQuizSelectedCommand);
         NavigateEditQuizCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new EditQuizViewModel(_navigationManager, _quizManager, SelectedQuiz), IsQuizSelectedCommand);
         NavigateMainMenuCommand = new RelayCommand(() =>
@@ -82,19 +83,33 @@ public class ChooseQuizViewModel : ObservableObject
 
     public Quiz PlaySelectedQuiz()
     {
-        return new Quiz(SelectedQuiz.Title, SelectedQuiz.Questions);
+        if(SelectedTab == 0 && SelectedQuiz != null)
+        {
+            return new Quiz(SelectedQuiz.Title, SelectedQuiz.Questions);
+        }
+        else 
+        {
+            Quiz catQuiz = _quizManager.GenerateRandomQuiz((int)SelectedCategoryIndex);
+            if (catQuiz.Questions.Count() > 0)
+            {
+                return catQuiz;
+            }
+            else
+            {
+                _navigationManager.CurrentViewModel = new ScoreboardViewModel(_navigationManager, _quizManager, 0, 0);
+                return catQuiz;
+            }
+        }
     }
     public void DeleteSelectedQuizCommand()
     {
         _quizManager.DeleteQuiz(SelectedQuiz);
     }
-
     public bool IsQuizSelectedCommand()
     {
         return SelectedQuiz != null;
     }
-
-    public void DisableButtons()
+    public void NullSelectedQuiz()
     {
         SelectedQuiz = null;
         DeleteQuizCommand.NotifyCanExecuteChanged();

@@ -18,7 +18,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Style TargetType="Button">
+        <Style TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5" />
             <Setter Property="Background" Value="DarkSlateBlue" />
             <Setter Property="Foreground" Value="AliceBlue" />
@@ -29,6 +29,7 @@
                 </Style>
             </Style.Resources>
         </Style>
+
         <Style x:Key="MainMenuButton" TargetType="Button">
             <Setter Property="Margin" Value="12" />
             <Setter Property="Background" Value="DarkSlateBlue" />

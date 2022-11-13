@@ -127,11 +127,17 @@ public class QuizManager
             q.QuestionPicturePath = Path.Combine(newPicturePath, Path.GetFileName(oldPicturePath));
         }
     } // DONE
-    //public Quiz GenerateRandomQuiz(int[] index)
-    //{
-    //    foreach (var qstn in AllQuizzes.SelectMany(qz => qz.Questions))
-    //    {
-    //        qstn.QuestionCategory 
-    //    }
-    //}
+    public Quiz GenerateRandomQuiz(int index)
+    {
+        List<Question> questionList = new List<Question>();
+
+        foreach (var qstn in AllQuizzes.SelectMany(qz => qz.Questions))
+        {
+            if ((int)qstn.QuestionCategory == index)
+            {
+                questionList.Add(qstn);
+            }
+        }
+        return new Quiz("Kategori Quiz", questionList);
+    }
 }

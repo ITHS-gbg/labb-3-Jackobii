@@ -56,7 +56,7 @@
                 <ListView
                     ItemsSource="{Binding CategoryQuizzes}"
                     SelectedIndex="{Binding SelectedCategoryIndex}"
-                    SelectionMode="Multiple" />
+                    SelectionMode="Extended" />
             </TabItem>
         </TabControl>
         <Button
@@ -69,7 +69,10 @@
             Grid.Column="2"
             Command="{Binding DeleteQuizCommand}"
             Content="Delete"
-            Visibility="{Binding HideButtons}" />
+            Visibility="Visible">
+
+        </Button>
+
         <Grid
             Grid.Row="5"
             Grid.Column="4"

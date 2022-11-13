@@ -14,20 +14,25 @@ public class ChooseQuizViewModel : ObservableObject
 {
     private NavigationManager _navigationManager;
     private QuizManager _quizManager;
-    private Quiz _selectedQuiz;
-    private int _selectedCategoryIndex;
+    private Quiz? _selectedQuiz;
+    private int? _selectedCategoryIndex;
     private int _selectedTab;
     public ObservableCollection<Quiz> AllQuizzes => (ObservableCollection<Quiz>)_quizManager.AllQuizzes;
     public string[] CategoryQuizzes => Enum.GetNames(typeof(Category));
 
-    public int SelectedCategoryIndex
+    public int? SelectedCategoryIndex
     {
-        get => _selectedCategoryIndex;
+        get
+        {
+            return _selectedCategoryIndex;
+        }
         set
         {
             SetProperty(ref _selectedCategoryIndex, value);
+            DisableButtons();
         }
     }
+
     public int SelectedTab
     {
         get
@@ -37,16 +42,20 @@ public class ChooseQuizViewModel : ObservableObject
         set
         {
             SetProperty(ref _selectedTab, value);
+            SelectedQuiz = null;
             DeleteQuizCommand.NotifyCanExecuteChanged();
             NavigateEditQuizCommand.NotifyCanExecuteChanged();
         }
     }
-    public Quiz SelectedQuiz
+    public Quiz? SelectedQuiz
     {
-        get => _selectedQuiz;
+        get 
+        {
+            return _selectedQuiz;
+        }
         set 
-        { 
-            SetProperty(ref _selectedQuiz, value); 
+        {
+            SetProperty(ref _selectedQuiz, value);
             DeleteQuizCommand.NotifyCanExecuteChanged(); 
             NavigateEditQuizCommand.NotifyCanExecuteChanged();
         }
@@ -85,12 +94,10 @@ public class ChooseQuizViewModel : ObservableObject
         return SelectedQuiz != null;
     }
 
-    public bool HideButtons()
+    public void DisableButtons()
     {
-        if (SelectedTab == 0)
-        {
-            return true;
-        }
-        return false;
+        SelectedQuiz = null;
+        DeleteQuizCommand.NotifyCanExecuteChanged();
+        NavigateEditQuizCommand.NotifyCanExecuteChanged();
     }
 }

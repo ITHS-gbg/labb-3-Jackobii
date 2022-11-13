@@ -12,6 +12,7 @@
     <Folder Include="DataModels\" />
     <Folder Include="Managers\" />
     <Folder Include="MyQuizFiles\" />
+    <Folder Include="Planering och UML\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,12 @@
 
   <ItemGroup>
     <None Update="MyQuizFiles\JacobFQuizFolder.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Planering och UML\Labb 3 - Planering.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Planering och UML\Labb3-JF.drawio .png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

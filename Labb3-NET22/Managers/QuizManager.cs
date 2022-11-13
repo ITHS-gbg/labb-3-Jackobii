@@ -145,8 +145,7 @@ public class QuizManager
             }
         }
         return new Quiz($"{(Category)index} Quiz", questionList);
-    }
-
+    } // DONE O FUNGERAR
     public async Task InitializeQuizzes()
     {
         if (!Directory.Exists(_myDirectoryPath))
@@ -161,5 +160,5 @@ public class QuizManager
         {
             LoadAllQuizzes();
         }
-    }
+    } // DONE
 }

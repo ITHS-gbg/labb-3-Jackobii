@@ -42,13 +42,13 @@ public class QuizManager
                 using StreamReader sr = new StreamReader(Path.Combine(directory, "quiz.json"));
 
                 text = await sr.ReadToEndAsync();
-                ((ObservableCollection<Quiz?>)_allQuizzes).Add(JsonSerializer.Deserialize<Quiz>(text));
+                ((ObservableCollection<Quiz?>)AllQuizzes).Add(JsonSerializer.Deserialize<Quiz>(text));
             }
         }
     } // DONE
     public void RemoveQuiz(Quiz quiz) // DONE
     {
-        ((ObservableCollection<Quiz>)_allQuizzes).Remove(quiz); // Ta bort ur den globala listan
+        ((ObservableCollection<Quiz>)AllQuizzes).Remove(quiz); // Ta bort ur den globala listan
 
         string folderPath = GenerateQuizFolderName(quiz);
         File.Delete(Path.Combine(_myDirectoryPath, folderPath, "quiz.json"));
@@ -62,13 +62,9 @@ public class QuizManager
     }
     public void UpdateExistingQuiz(Quiz oldQuiz, Quiz newQuiz)
     {
-        if (oldQuiz.Title.Equals(newQuiz.Title))
-        {
-            RemoveQuiz(oldQuiz);
-            SaveToFileQuiz(newQuiz);
-            ((ObservableCollection<Quiz>)_allQuizzes).Add(newQuiz);
-        }
-    } // Ej implementerad
+        RemoveQuiz(oldQuiz);
+        SaveToFileQuiz(newQuiz);
+    } // DONE
     public void SaveToFileQuiz(Quiz quiz) // DONE
     {
         string folderName = GenerateQuizFolderName(quiz);

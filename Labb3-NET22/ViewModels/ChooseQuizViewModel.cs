@@ -44,7 +44,12 @@ public class ChooseQuizViewModel : ObservableObject
     public Quiz SelectedQuiz
     {
         get => _selectedQuiz;
-        set { SetProperty(ref _selectedQuiz, value); DeleteQuizCommand.NotifyCanExecuteChanged(); }
+        set 
+        { 
+            SetProperty(ref _selectedQuiz, value); 
+            DeleteQuizCommand.NotifyCanExecuteChanged(); 
+            NavigateEditQuizCommand.NotifyCanExecuteChanged();
+        }
     }
 
     public IRelayCommand NavigatePlayQuizCommand { get; }
@@ -60,10 +65,10 @@ public class ChooseQuizViewModel : ObservableObject
         NavigatePlayQuizCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new PlayQuizViewModel(_navigationManager, _quizManager, PlaySelectedQuiz()));
         NavigateEditQuizCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new EditQuizViewModel(_navigationManager, _quizManager, SelectedQuiz));
+            _navigationManager.CurrentViewModel = new EditQuizViewModel(_navigationManager, _quizManager, SelectedQuiz), IsQuizSelectedCommand);
         NavigateMainMenuCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new MainMenuViewModel(_navigationManager, _quizManager));
-        DeleteQuizCommand = new RelayCommand(DeleteSelectedQuizCommand, CanDeleteSelectedQuizCommand);
+        DeleteQuizCommand = new RelayCommand(DeleteSelectedQuizCommand, IsQuizSelectedCommand);
     }
 
     public Quiz PlaySelectedQuiz()
@@ -75,7 +80,7 @@ public class ChooseQuizViewModel : ObservableObject
         _quizManager.DeleteQuiz(SelectedQuiz);
     }
 
-    public bool CanDeleteSelectedQuizCommand()
+    public bool IsQuizSelectedCommand()
     {
         return SelectedQuiz != null;
     }

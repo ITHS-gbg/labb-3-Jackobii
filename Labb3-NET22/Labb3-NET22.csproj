@@ -9,12 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ExamplePics\SwagMoma.jpeg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="DataModels\" />
     <Folder Include="Managers\" />
+    <Folder Include="MyQuizFiles\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,9 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="ExamplePics\SwagMoma.jpeg">
+    <None Update="MyQuizFiles\JacobFQuizFolder.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

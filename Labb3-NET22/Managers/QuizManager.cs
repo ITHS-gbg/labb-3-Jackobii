@@ -4,11 +4,16 @@ using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.DirectoryServices;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
+using System.Windows.Shell;
 using Labb3_NET22.DataModels;
+using Path = System.IO.Path;
 
 namespace Labb3_NET22.Managers;
 
@@ -29,7 +34,8 @@ public class QuizManager
     public IEnumerable<Quiz> AllQuizzes => (ObservableCollection<Quiz>)_allQuizzes;
     public QuizManager()
     {
-        LoadAllQuizzes();
+
+        InitializeQuizzes();
     }
     private async Task LoadAllQuizzes()
     {
@@ -139,5 +145,21 @@ public class QuizManager
             }
         }
         return new Quiz($"{(Category)index} Quiz", questionList);
+    }
+
+    public async Task InitializeQuizzes()
+    {
+        if (!Directory.Exists(_myDirectoryPath))
+        {
+            var currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            await Task.Run(() =>
+                ZipFile.ExtractToDirectory(Path.Combine(currentDirectory, "MyQuizFiles\\JacobFQuizFolder.zip"),
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), true));
+            LoadAllQuizzes();
+        }
+        else
+        {
+            LoadAllQuizzes();
+        }
     }
 }

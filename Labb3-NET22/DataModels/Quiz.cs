@@ -43,14 +43,13 @@ public class Quiz
         int rndQuestionIndex = rnd.Next(_questions.Count());
         Question rndQuestion = _questions.ElementAt(rndQuestionIndex);
         RemoveQuestion(rndQuestionIndex);
-        return rndQuestion; 
-        // TODO tills _questions innehåller 0 frågor? Kanske fixas i play
+        return rndQuestion;
     }
 
     public void AddQuestion(string statement, int correctAnswer, string pictureFilePath, Category category, string[] answers)
     {
         var newQuestion = new Question(statement, answers, correctAnswer, pictureFilePath, category);
-        ((ObservableCollection<Question>)_questions)?.Add(newQuestion);
+        ((List<Question>)_questions)?.Add(newQuestion);
     }
 
     public void RemoveQuestion(int index)

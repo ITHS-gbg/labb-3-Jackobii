@@ -280,7 +280,7 @@ public class EditQuizViewModel : ObservableObject
     {
         if (Questions.Contains(SelectedQuestion))
         {
-            _quiz.AddQuestion(Statement, CorrectAnswer, PictureFilePath, (Category)SelectedCategoryIndex, Answers.ToArray() );
+            Questions.Add(new Question(Statement, Answers.ToArray(), CorrectAnswer, PictureFilePath, (Category)SelectedCategoryIndex));
             Questions.Remove(SelectedQuestion);
         }
         else

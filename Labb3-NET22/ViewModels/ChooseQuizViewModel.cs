@@ -29,6 +29,7 @@ public class ChooseQuizViewModel : ObservableObject
         set
         {
             SetProperty(ref _selectedCategoryIndex, value);
+            NavigatePlayQuizCommand.NotifyCanExecuteChanged();
             NullSelectedQuiz();
         }
     }
@@ -73,7 +74,7 @@ public class ChooseQuizViewModel : ObservableObject
         _quizManager = quizManager;
 
         NavigatePlayQuizCommand = new RelayCommand(() =>
-            _navigationManager.CurrentViewModel = new PlayQuizViewModel(_navigationManager, _quizManager, PlaySelectedQuiz()), IsQuizSelectedCommand);
+            _navigationManager.CurrentViewModel = new PlayQuizViewModel(_navigationManager, _quizManager, PlaySelectedQuiz()), IsCategoryOrQuizSelected);
         NavigateEditQuizCommand = new RelayCommand(() =>
             _navigationManager.CurrentViewModel = new EditQuizViewModel(_navigationManager, _quizManager, SelectedQuiz), IsQuizSelectedCommand);
         NavigateMainMenuCommand = new RelayCommand(() =>
@@ -108,6 +109,11 @@ public class ChooseQuizViewModel : ObservableObject
     public bool IsQuizSelectedCommand()
     {
         return SelectedQuiz != null;
+    }
+
+    public bool IsCategoryOrQuizSelected()
+    {
+        return SelectedQuiz != null || SelectedCategoryIndex != null;
     }
     public void NullSelectedQuiz()
     {
